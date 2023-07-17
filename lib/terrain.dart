@@ -8,9 +8,14 @@ class Terrain extends PositionComponent with HasGameRef<Dorci> {
   FutureOr<void> onLoad() {
     position = Vector2.zero();
     grass = Rect.fromCenter(
-      center: game.camera.gameSize.toOffset() / 2,
-      width: game.camera.gameSize.x,
-      height: game.camera.gameSize.y,
+      center: Offset(game.width, game.height) / 2,
+      width: game.width,
+      height: game.height,
+    );
+    target = Rect.fromCenter(
+      center: Offset(game.width, 0) / 2,
+      width: game.width,
+      height: 100,
     );
   }
 
@@ -18,9 +23,13 @@ class Terrain extends PositionComponent with HasGameRef<Dorci> {
   final Paint _grassPaint = Paint()..color = Colors.green;
   set grassColor(Color color) => _grassPaint.color = color;
 
+  late final Rect target;
+  final targetPaint = Paint()..color = Colors.grey;
+
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     canvas.drawRect(grass, _grassPaint);
+    canvas.drawRect(target, targetPaint);
+    super.render(canvas);
   }
 }
