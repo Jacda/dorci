@@ -10,7 +10,7 @@ class Hub extends PositionComponent with HasGameRef<Dorci> {
   @override
   FutureOr<void> onLoad() {
     position = Vector2(game.width / 2, game.height);
-    size = Vector2(200, 100);
+    size = Vector2(180, 100);
     final shape = Rect.fromCenter(
       center: Offset.zero,
       width: width,

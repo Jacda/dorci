@@ -1,17 +1,28 @@
 import 'dart:async';
 
 import 'package:dorci/hub.dart';
+import 'package:dorci/hud.dart';
 import 'package:dorci/terrain.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class Dorci extends FlameGame {
+class Dorci extends FlameGame with HasTappables {
   @override
   Color backgroundColor() => const Color.fromARGB(255, 21, 203, 231);
 
   double get width => camera.gameSize.x;
   double get height => camera.gameSize.y;
+
+  double _credit = 0;
+
+  double get credit => _credit;
+  set credit(double credit) {
+    _credit = credit;
+    creditText.text = "${_credit.toInt()}";
+  }
+
+  TextComponent creditText = TextBoxComponent(position: Vector2(0, 0));
 
   @override
   FutureOr<void> onLoad() {
@@ -20,11 +31,13 @@ class Dorci extends FlameGame {
     camera.viewport = FixedResolutionViewport(Vector2(width, size.y));
     add(Terrain());
     add(Hub());
+    add(creditText);
+    add(Hud());
   }
 
   @override
   void update(double dt) {
-    resourceCounters(dt);
+    //resourceCounters(dt);
     super.update(dt);
   }
 
