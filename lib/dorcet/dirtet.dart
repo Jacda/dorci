@@ -19,7 +19,7 @@ class Dirtet extends Dorcet {
   void createProjectile() {
     final offset = Random().nextInt(accuracy) - accuracy / 2;
     final pposition = Vector2(x + offset, y);
-    game.add(Dirtectile(speed: speed, damage: damage, position: pposition));
+    game.add(Dirtectile(speed: speed, damage: damage.toDouble(), position: pposition));
   }
   
 }

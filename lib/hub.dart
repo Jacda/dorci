@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:dorci/dorcet/aromet.dart';
 import 'package:dorci/dorcet/yoghet.dart';
+import 'package:dorci/projectile/tap_projectile.dart';
 import 'package:flame/components.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,9 @@ class Hub extends PositionComponent with HasGameRef<Dorci>, Tappable {
   late final Yoghet yoghet;
   late final Dirtet dirtet;
   late final Aromet aromet;
+
+  double get totalDPS =>
+      yoghet.effectiveDps + dirtet.effectiveDps + aromet.effectiveDps;
 
   Hub();
 
@@ -44,7 +49,13 @@ class Hub extends PositionComponent with HasGameRef<Dorci>, Tappable {
 
   @override
   bool onTapDown(TapDownInfo info) {
-    game.credit *= 20;
+    final offset = Random().nextInt(20) - 10;
+    final pposition = Vector2(x + offset, y - 50);
+    game.add(TapProjectile(
+      speed: 250,
+      damage: (totalDPS / 5).floor() + 0.2,
+      position: pposition,
+    ));
     return false;
   }
 }

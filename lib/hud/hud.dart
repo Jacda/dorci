@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:dorci/dorci.dart';
+import 'package:dorci/main.dart';
 import 'package:flutter/material.dart';
 import 'dorcet_item.dart';
 
@@ -40,6 +43,13 @@ class _HudState extends State<Hud> {
             color: Colors.orange,
             child: Stack(
               children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: HudStatus(
+                    game: widget.game,
+                    scale: constraints.maxWidth,
+                  ),
+                ),
                 ItemBuilder(
                   game: widget.game,
                   width: constraints.maxWidth,
@@ -88,7 +98,7 @@ class ItemBuilder extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: SizedBox(
         width: width / 2 * 0.9,
-        height: height * 0.99,
+        height: height * 0.92,
         child: ListView.builder(
           itemCount: 3,
           itemBuilder: (context, index) {
@@ -96,7 +106,7 @@ class ItemBuilder extends StatelessWidget {
               height: width / 2,
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  child: Container(
+                child: Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     border: Border.all(
@@ -112,6 +122,51 @@ class ItemBuilder extends StatelessWidget {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class HudStatus extends StatefulWidget {
+  const HudStatus({super.key, required this.scale, required this.game});
+  final double scale;
+  final Dorci game;
+
+  @override
+  State<HudStatus> createState() => _HudStatusState();
+}
+
+class _HudStatusState extends State<HudStatus> {
+  Timer? timer;
+  @override
+  void initState() {
+    super.initState();
+    // Start the timer when the widget is initialized
+    timer = Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    // Cancel the timer when the widget is disposed
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: widget.scale / 7,
+      child: Center(
+        child: Text(
+          formatText("${widget.game.credit.toInt()}"),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: widget.scale / 20,
+          ),
         ),
       ),
     );

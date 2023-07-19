@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dorci/dorcet/dorcet.dart';
 import 'package:dorci/hub.dart';
+import 'package:dorci/main.dart';
 import 'package:dorci/terrain.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -23,7 +24,7 @@ class Dorci extends FlameGame with HasTappables {
   double get credit => _credit;
   set credit(double credit) {
     _credit = credit;
-    creditText.text = "${_credit.toInt()}";
+    creditText.text = formatText("${_credit.toInt()}");
   }
 
   TextComponent creditText = TextBoxComponent(position: Vector2(0, 0));
@@ -37,7 +38,7 @@ class Dorci extends FlameGame with HasTappables {
     add(Terrain());
     add(hub);
     add(creditText);
-    credit = 10;
+    credit = 0;
   }
 
   @override
@@ -48,7 +49,7 @@ class Dorci extends FlameGame with HasTappables {
 
   void open() {
     camera.follow = (Vector2(-width / 4, 0));
-    creditText.position = Vector2(width / 4, 0);
+    creditText.position = Vector2(-width, 0);
   }
 
   void close() {

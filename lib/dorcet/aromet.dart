@@ -8,8 +8,8 @@ import 'dorcet.dart';
 class Aromet extends Dorcet {
   Aromet({required super.position})
       : super(
-          baseDamage: 100,
-          dps: 10,
+          baseDamage: 150,
+          dps: 15,
           speed: 50,
           accuracy: 150,
           baseCost: 5000,
@@ -19,6 +19,7 @@ class Aromet extends Dorcet {
   void createProjectile() {
     final offset = Random().nextInt(accuracy) - accuracy / 2;
     final pposition = Vector2(x + offset, y);
-    game.add(Aromectile(speed: speed, damage: damage, position: pposition));
+    game.add(Aromectile(
+        speed: speed, damage: damage.toDouble(), position: pposition));
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dorci/dorcet/dorcet.dart';
+import 'package:dorci/main.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -105,10 +106,9 @@ class _DorcetItemState extends State<DorcetItem> {
         children: [
           Align(
             alignment: const Alignment(0, -0.3),
-            child: Container(
+            child: SizedBox(
               width: scale / 1.5,
               height: scale / 5,
-              color: Colors.white,
               child: Row(
                 children: [
                   UpgradeButton(
@@ -189,7 +189,7 @@ class _DorcetItemState extends State<DorcetItem> {
                         Align(
                           alignment: const Alignment(0, 0.7),
                           child: Text(
-                            "${widget.dorcet.cost.floor()}",
+                            formatText("${widget.dorcet.cost.floor()}"),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: scale / 14,

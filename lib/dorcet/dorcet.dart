@@ -18,7 +18,7 @@ abstract class Dorcet extends PositionComponent with HasGameRef<Dorci> {
     required this.baseCost,
     required super.position,
   }) {
-    timer = -frequency;
+    timer = -frequency / 2;
     upgrades = [
       DorcetUpgrade(
         baseCost: baseCost,
@@ -114,7 +114,7 @@ class DorcetUpgrade {
   });
 
   double get cost =>
-      baseCost * pow(1.4 - 0.02 * log(level * level), level).toDouble();
+      baseCost * pow(1.25 - 0.03 * log(e + level), level).toDouble() * 8;
 }
 
 enum UpgradeType { dps, acccuracy }
