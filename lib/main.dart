@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:dorci/dorci.dart';
-import 'package:dorci/hud.dart';
+import 'package:dorci/hud/hud.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 

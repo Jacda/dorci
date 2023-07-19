@@ -1,13 +1,17 @@
 import 'dart:async';
 
+import 'package:dorci/dorcet/dorcet.dart';
 import 'package:dorci/hub.dart';
-import 'package:dorci/hud.dart';
 import 'package:dorci/terrain.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class Dorci extends FlameGame with HasTappables {
+  final Map<int, Dorcet> dorcetMap = {};
+
+  late int i;
+
   @override
   Color backgroundColor() => const Color.fromARGB(255, 21, 203, 231);
 
@@ -51,6 +55,8 @@ class Dorci extends FlameGame with HasTappables {
     camera.follow = (Vector2(0, 0));
     creditText.position = Vector2(0, 0);
   }
+
+  bool enoughCredit(int cost) => cost <= credit;
 
   late int componentCount;
 

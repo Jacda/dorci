@@ -14,11 +14,15 @@ class Yoghet extends Dorcet {
           baseCost: 10,
         );
 
-  
-
   @override
   void createProjectile() {
-    final offset = Random().nextInt(accuracy) - accuracy / 2;
+    final double offset;
+    if (accuracy > 1) {
+      offset = Random().nextInt(accuracy) - accuracy / 2;
+    } else {
+      offset = 0;
+    }
+
     final pposition = Vector2(x + offset, y);
     game.add(Yoghectile(speed: speed, damage: damage, position: pposition));
   }

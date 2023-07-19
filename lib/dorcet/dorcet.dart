@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:dorci/dorci.dart';
@@ -16,7 +17,31 @@ abstract class Dorcet extends PositionComponent with HasGameRef<Dorci> {
     required this.accuracy,
     required this.baseCost,
     required super.position,
-  });
+  }) {
+    timer = -frequency;
+    upgrades = [
+      DorcetUpgrade(
+        baseCost: baseCost,
+        level: 10,
+        multiplier: 1.5,
+        upgradeType: UpgradeType.dps,
+      ),
+      DorcetUpgrade(
+        baseCost: baseCost,
+        level: 25,
+        multiplier: 2,
+        upgradeType: UpgradeType.acccuracy,
+      ),
+      DorcetUpgrade(
+        baseCost: baseCost,
+        level: 50,
+        multiplier: 2,
+        upgradeType: UpgradeType.dps,
+      )
+    ];
+  }
+
+  late final List<DorcetUpgrade> upgrades;
 
   bool active = false;
 
@@ -29,16 +54,19 @@ abstract class Dorcet extends PositionComponent with HasGameRef<Dorci> {
   }
 
   int get damage => (level * baseDamage).toInt();
-  double get cost => baseCost * pow(1.4, level).toDouble();
+  //double get cost => baseCost * pow(1.4, level).toDouble();
+  double get cost =>
+      baseCost * pow(1.25 - 0.03 * log(e + level), level).toDouble();
 
   set incDamage(double incDamage) {
     dps = dps * (incDamage / baseDamage);
     baseDamage = incDamage;
   }
 
+  double get effectiveDps => dps * level;
   double get frequency => baseDamage / dps;
 
-  double timer = 0;
+  late double timer;
 
   @override
   void update(double dt) {
@@ -51,4 +79,42 @@ abstract class Dorcet extends PositionComponent with HasGameRef<Dorci> {
   }
 
   void createProjectile() {}
+
+  void upgrade(DorcetUpgrade upgrade) {
+    if (upgrade.purchased) return;
+    switch (upgrade.upgradeType) {
+      case UpgradeType.dps:
+        dps *= upgrade.multiplier;
+      case UpgradeType.acccuracy:
+        accuracy = (accuracy / upgrade.multiplier).floor();
+    }
+    game.credit -= upgrade.cost;
+    upgrade.purchased = true;
+  }
+
+  @override
+  FutureOr<void> onLoad() {
+    // TODO: implement onLoad
+    return super.onLoad();
+  }
 }
+
+class DorcetUpgrade {
+  final int baseCost;
+  final int level;
+  final double multiplier;
+  final UpgradeType upgradeType;
+  bool purchased = false;
+
+  DorcetUpgrade({
+    required this.baseCost,
+    required this.level,
+    required this.multiplier,
+    required this.upgradeType,
+  });
+
+  double get cost =>
+      baseCost * pow(1.4 - 0.02 * log(level * level), level).toDouble();
+}
+
+enum UpgradeType { dps, acccuracy }
