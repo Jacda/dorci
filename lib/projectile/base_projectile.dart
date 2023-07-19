@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 
 abstract class BaseProjectile extends PositionComponent with HasGameRef<Dorci> {
   final double speed;
-  final double damage;
+  final int damage;
   BaseProjectile({
     required this.speed,
     required this.damage,

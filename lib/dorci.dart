@@ -24,21 +24,32 @@ class Dorci extends FlameGame with HasTappables {
 
   TextComponent creditText = TextBoxComponent(position: Vector2(0, 0));
 
+  final Hub hub = Hub();
   @override
   FutureOr<void> onLoad() {
     debugMode = false;
     final width = size.y / (16 / 9);
     camera.viewport = FixedResolutionViewport(Vector2(width, size.y));
     add(Terrain());
-    add(Hub());
+    add(hub);
     add(creditText);
-    add(Hud());
+    credit = 10;
   }
 
   @override
   void update(double dt) {
     //resourceCounters(dt);
     super.update(dt);
+  }
+
+  void open() {
+    camera.follow = (Vector2(-width / 4, 0));
+    creditText.position = Vector2(width / 4, 0);
+  }
+
+  void close() {
+    camera.follow = (Vector2(0, 0));
+    creditText.position = Vector2(0, 0);
   }
 
   late int componentCount;

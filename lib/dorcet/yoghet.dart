@@ -6,7 +6,15 @@ import 'package:flame/components.dart';
 
 class Yoghet extends Dorcet {
   Yoghet({required super.position})
-      : super(damage: 1, dps: 2, speed: 200, accuracy: 100);
+      : super(
+          baseDamage: 1,
+          dps: 0.5,
+          speed: 200,
+          accuracy: 100,
+          baseCost: 10,
+        );
+
+  
 
   @override
   void createProjectile() {

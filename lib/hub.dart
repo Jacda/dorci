@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'dorci.dart';
 
 class Hub extends PositionComponent with HasGameRef<Dorci> {
+  late final Yoghet yoghet;
+
   Hub();
 
   @override
@@ -17,7 +19,7 @@ class Hub extends PositionComponent with HasGameRef<Dorci> {
       height: height,
     );
     rect = RRect.fromRectXY(shape, 10, 10);
-    add(Yoghet(position: Vector2(x, y - 50)));
+    add(yoghet = Yoghet(position: Vector2(x, y - 50)));
   }
 
   late final RRect rect;
