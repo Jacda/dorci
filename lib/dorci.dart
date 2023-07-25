@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:dorci/dorcet/dorcet.dart';
 import 'package:dorci/hub.dart';
-import 'package:dorci/main.dart';
 import 'package:dorci/terrain.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class Dorci extends FlameGame with HasTappables {
+  final List<Dorcet> activeDorcetList = [];
   final Map<int, Dorcet> dorcetMap = {};
 
   late int i;
@@ -19,22 +19,17 @@ class Dorci extends FlameGame with HasTappables {
   double get width => camera.gameSize.x;
   double get height => camera.gameSize.y;
 
-  double _credit = 0;
+  double credit = 0;
 
-  double get credit => _credit;
-  set credit(double credit) {
-    _credit = credit;
-    creditText.text = formatText("${_credit.toInt()}");
-  }
-
-  TextComponent creditText = TextBoxComponent(position: Vector2(0, 0));
+  TextComponent creditText = TextBoxComponent(position: Vector2(10, 10));
 
   final Hub hub = Hub();
   @override
-  FutureOr<void> onLoad() {
+  FutureOr<void> onLoad() async {
     debugMode = false;
-    final width = size.y / (16 / 9);
+    final width = size.y / (20 / 9);
     camera.viewport = FixedResolutionViewport(Vector2(width, size.y));
+    await images.loadAllImages();
     add(Terrain());
     add(hub);
     add(creditText);
@@ -47,15 +42,9 @@ class Dorci extends FlameGame with HasTappables {
     super.update(dt);
   }
 
-  void open() {
-    camera.follow = (Vector2(-width / 4, 0));
-    creditText.position = Vector2(-width, 0);
-  }
+  void open() => camera.follow = (Vector2(-width / 4, 0));
 
-  void close() {
-    camera.follow = (Vector2(0, 0));
-    creditText.position = Vector2(0, 0);
-  }
+  void close() => camera.follow = (Vector2(0, 0));
 
   bool enoughCredit(int cost) => cost <= credit;
 

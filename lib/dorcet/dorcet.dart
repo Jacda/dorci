@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:dorci/dorci.dart';
@@ -10,6 +9,7 @@ abstract class Dorcet extends PositionComponent with HasGameRef<Dorci> {
   double speed;
   int accuracy;
   int baseCost;
+  final String name;
   Dorcet({
     required this.baseDamage,
     required this.dps,
@@ -17,6 +17,7 @@ abstract class Dorcet extends PositionComponent with HasGameRef<Dorci> {
     required this.accuracy,
     required this.baseCost,
     required super.position,
+    required this.name,
   }) {
     timer = -frequency / 2;
     upgrades = [
@@ -49,7 +50,10 @@ abstract class Dorcet extends PositionComponent with HasGameRef<Dorci> {
 
   int get level => _level;
   set level(int level) {
-    if (_level == 0) active = true;
+    if (_level == 0) {
+      active = true;
+      game.activeDorcetList.add(this);
+    }
     _level = level;
   }
 
@@ -92,11 +96,6 @@ abstract class Dorcet extends PositionComponent with HasGameRef<Dorci> {
     upgrade.purchased = true;
   }
 
-  @override
-  FutureOr<void> onLoad() {
-    // TODO: implement onLoad
-    return super.onLoad();
-  }
 }
 
 class DorcetUpgrade {

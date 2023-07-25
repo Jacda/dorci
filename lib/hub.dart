@@ -4,12 +4,14 @@ import 'package:dorci/dorcet/aromet.dart';
 import 'package:dorci/dorcet/yoghet.dart';
 import 'package:dorci/projectile/tap_projectile.dart';
 import 'package:flame/components.dart';
-import 'package:flame/src/gestures/events.dart';
+import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 import 'dorcet/dirtet.dart';
 import 'dorci.dart';
 
-class Hub extends PositionComponent with HasGameRef<Dorci>, Tappable {
+class Hub extends SpriteAnimationComponent
+    with HasGameRef<Dorci>, Tappable, OpacityProvider {
   late final Yoghet yoghet;
   late final Dirtet dirtet;
   late final Aromet aromet;
@@ -17,12 +19,24 @@ class Hub extends PositionComponent with HasGameRef<Dorci>, Tappable {
   double get totalDPS =>
       yoghet.effectiveDps + dirtet.effectiveDps + aromet.effectiveDps;
 
-  Hub();
+  Hub() : super(anchor: Anchor.bottomCenter);
 
   @override
   FutureOr<void> onLoad() {
-    anchor = Anchor.center;
-    position = Vector2(game.width / 2, game.height);
+    List<Sprite> splist = [];
+    for (int i = 0; i < 24; i++) {
+      final String s;
+      if (i < 10) {
+        s = "0$i";
+      } else {
+        s = "$i";
+      }
+
+      splist.add(Sprite(game.images.fromCache("frame_${s}_delay-0.06s.gif")));
+    }
+    animation = SpriteAnimation.spriteList(splist, stepTime: 0.05);
+    opacity = 1;
+    position = Vector2(game.width / 2, game.height * 2 / 3.2);
     size = Vector2(180, 100);
     final shape = Rect.fromCenter(
       center: (size / 2).toOffset(),
@@ -43,17 +57,17 @@ class Hub extends PositionComponent with HasGameRef<Dorci>, Tappable {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRRect(rect, shapePaint);
+    //canvas.drawRRect(rect, shapePaint);
     super.render(canvas);
   }
 
   @override
   bool onTapDown(TapDownInfo info) {
-    final offset = Random().nextInt(20) - 10;
+    final offset = Random().nextInt(40) - 20;
     final pposition = Vector2(x + offset, y - 50);
     game.add(TapProjectile(
       speed: 250,
-      damage: (totalDPS / 5).floor() + 0.2,
+      damage: (totalDPS).floor() + 1000,
       position: pposition,
     ));
     return false;

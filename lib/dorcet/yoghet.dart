@@ -12,6 +12,7 @@ class Yoghet extends Dorcet {
           speed: 200,
           accuracy: 100,
           baseCost: 10,
+          name: "YOGHURT DORCET",
         );
 
   @override
@@ -24,6 +25,7 @@ class Yoghet extends Dorcet {
     }
 
     final pposition = Vector2(x + offset, y);
-    game.add(Yoghectile(speed: speed, damage: damage.toDouble(), position: pposition));
+    game.add(Yoghectile(
+        speed: speed, damage: damage.toDouble(), position: pposition));
   }
 }

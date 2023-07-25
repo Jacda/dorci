@@ -13,13 +13,14 @@ class Dirtet extends Dorcet {
           speed: 150,
           accuracy: 120,
           baseCost: 100,
+          name: "DIRT DORCET",
         );
 
   @override
   void createProjectile() {
     final offset = Random().nextInt(accuracy) - accuracy / 2;
     final pposition = Vector2(x + offset, y);
-    game.add(Dirtectile(speed: speed, damage: damage.toDouble(), position: pposition));
+    game.add(Dirtectile(
+        speed: speed, damage: damage.toDouble(), position: pposition));
   }
-  
 }

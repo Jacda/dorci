@@ -13,6 +13,7 @@ class Aromet extends Dorcet {
           speed: 50,
           accuracy: 150,
           baseCost: 5000,
+          name: "AROMA DORCET",
         );
 
   @override

@@ -1,12 +1,15 @@
 import 'dart:ui';
 
 import 'package:dorci/dorci.dart';
-import 'package:dorci/hud/hud.dart';
+import 'package:dorci/interface/interface.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   final game = Dorci();
+  WidgetsFlutterBinding.ensureInitialized();
+  Flame.device.fullScreen();
   runApp(App(game: game));
 }
 
@@ -15,10 +18,10 @@ class App extends StatefulWidget {
   final Dorci game;
 
   @override
-  State<App> createState() => _MyWidgetState();
+  State<App> createState() => _AppState();
 }
 
-class _MyWidgetState extends State<App> {
+class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,14 +29,12 @@ class _MyWidgetState extends State<App> {
       scrollBehavior: MyCustomScrollBehavior(),
       home: Scaffold(
         body: Center(
-          child: AspectRatio(
-            aspectRatio: 9 / 16,
-            child: Stack(
-              children: [
-                GameWidget(game: widget.game),
-                Hud(game: widget.game),
-              ],
-            ),
+          child: Stack(
+            children: [
+              GameWidget(game: widget.game),
+              Interface(game: widget.game),
+              // Hud(game: widget.game),
+            ],
           ),
         ),
       ),
