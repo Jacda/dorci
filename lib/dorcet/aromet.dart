@@ -9,10 +9,10 @@ class Aromet extends Dorcet {
   Aromet({required super.position})
       : super(
           baseDamage: 150,
-          dps: 15,
+          baseAttackSpeed: 0.1,
           speed: 50,
           accuracy: 150,
-          baseCost: 5000,
+          unlockCost: 5000,
           name: "AROMA DORCET",
         );
 

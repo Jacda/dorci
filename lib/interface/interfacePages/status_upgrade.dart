@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dorci/dorcet/dorcet.dart';
 import 'package:dorci/dorci.dart';
 import 'package:dorci/main.dart';
@@ -12,39 +14,58 @@ class StatusUpgrade extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: game.activeDorcetList.length,
+      itemCount: 3,
       itemBuilder: ((context, index) {
-        final dorcet = game.activeDorcetList[index];
+        final dorcet = game.dorcetMap[index];
+        if (dorcet == null) return Container();
+        if (!dorcet.active) return Container();
         return Container(
-          height: 170,
-          color: colorlist[index],
-          child: Row(
+          height: 190,
+          color: const Color.fromRGBO(224, 64, 251, 1),
+          child: Column(
             children: [
               Expanded(
-                  child: Center(
-                child: Text(
-                  dorcet.name,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                flex: 9,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Center(
+                      child: Text(
+                        dorcet.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                    )),
+                    Expanded(
+                      child: Column(children: [
+                        Expanded(flex: 1, child: Container()),
+                        UpgradeButton(
+                          game: game,
+                          dorcet: dorcet,
+                          upgradeType: UpgradeType.attackDamage,
+                        ),
+                        UpgradeButton(
+                          game: game,
+                          dorcet: dorcet,
+                          upgradeType: UpgradeType.attackSpeed,
+                        )
+                      ]),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                    height: 5,
+                    color: Colors.deepPurpleAccent[200],
                   ),
                 ),
-              )),
-              Expanded(
-                child: Column(children: [
-                  UpgradeButton(
-                    game: game,
-                    dorcet: dorcet,
-                    upgradeType: UpgradeType.attackDamage,
-                  ),
-                  UpgradeButton(
-                    game: game,
-                    dorcet: dorcet,
-                    upgradeType: UpgradeType.attackSpeed,
-                  )
-                ]),
-              ),
+              )
             ],
           ),
         );
@@ -70,6 +91,21 @@ class UpgradeButton extends StatefulWidget {
 
 class _UpgradeButtonState extends State<UpgradeButton> {
   bool isPressed = false;
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   void onTapDown(TapDownDetails details) {
     isPressed = true;
@@ -82,7 +118,7 @@ class _UpgradeButtonState extends State<UpgradeButton> {
   }
 
   void onTapUp(TapUpDetails details) {
-    //lvlUp();
+    levelUp();
     setState(() {});
     Future.delayed(
       const Duration(milliseconds: 100),
@@ -92,20 +128,47 @@ class _UpgradeButtonState extends State<UpgradeButton> {
     );
   }
 
+  void levelUp() {
+    if (widget.upgradeType.isAttackDamage) {
+      if (widget.game.credit < widget.dorcet.levelUpDamageCost) return;
+      widget.game.credit -= widget.dorcet.levelUpDamageCost;
+      widget.dorcet.damageLevel++;
+    } else {
+      if (widget.game.credit < widget.dorcet.levelUpAttackSpeedCost) return;
+      widget.game.credit -= widget.dorcet.levelUpAttackSpeedCost;
+      widget.dorcet.attackSpeedLevel++;
+    }
+  }
+
+  bool enoughMoneyUp() {
+    if (widget.upgradeType.isAttackDamage) {
+      if (widget.game.credit < widget.dorcet.levelUpDamageCost) return false;
+      return true;
+    } else {
+      if (widget.game.credit < widget.dorcet.levelUpAttackSpeedCost) {
+        return false;
+      }
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: 6,
       child: FractionallySizedBox(
-        heightFactor: 0.98,
+        heightFactor: 0.9,
+        widthFactor: 0.95,
         child: GestureDetector(
           onTapDown: onTapDown,
           onTapUp: onTapUp,
           onTapCancel: onTapCancel,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color:
-                  isPressed ? const Color.fromARGB(255, 58, 138, 60) : Colors.green,
+              borderRadius: BorderRadius.circular(8),
+              color: isPressed
+                  ? const Color.fromARGB(255, 58, 138, 60)
+                  : Colors.green,
               border: Border.all(
                 color: Colors.yellowAccent,
                 width: 2,
@@ -135,8 +198,8 @@ class _UpgradeButtonState extends State<UpgradeButton> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         widget.upgradeType.isAttackDamage
-                            ? "  ${widget.dorcet.damage}"
-                            : "  ${"${1 / widget.dorcet.frequency}000".substring(0, 4)} per/sec",
+                            ? "  ${"${widget.dorcet.damage}000".substring(0, 4)}"
+                            : "  ${"${widget.dorcet.attackSpeed}000".substring(0, 4)} per/sec",
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -158,16 +221,20 @@ class _UpgradeButtonState extends State<UpgradeButton> {
                         width: 1.5,
                         color: Colors.black.withOpacity(0.2),
                       ),
-                      color: Colors.black.withOpacity(0.3),
+                      color: enoughMoneyUp()
+                          ? Color.fromARGB(255, 0, 255, 8).withOpacity(0.25)
+                          : Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Center(
                       child: Text(
-                        formatText("531513"),
+                        formatText(widget.upgradeType.isAttackDamage
+                            ? "${widget.dorcet.levelUpDamageCost.toInt()}"
+                            : "${widget.dorcet.levelUpAttackSpeedCost.toInt()}"),
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 10,
+                          fontSize: 15,
                         ),
                       ),
                     ),

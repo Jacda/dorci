@@ -16,8 +16,7 @@ class Hub extends SpriteAnimationComponent
   late final Dirtet dirtet;
   late final Aromet aromet;
 
-  double get totalDPS =>
-      yoghet.effectiveDps + dirtet.effectiveDps + aromet.effectiveDps;
+  double get totalDPS => yoghet.dps + dirtet.dps + aromet.dps;
 
   Hub() : super(anchor: Anchor.bottomCenter);
 
@@ -67,7 +66,7 @@ class Hub extends SpriteAnimationComponent
     final pposition = Vector2(x + offset, y - 50);
     game.add(TapProjectile(
       speed: 250,
-      damage: (totalDPS).floor() + 1000,
+      damage: (totalDPS / 4).floor() + 10000000,
       position: pposition,
     ));
     return false;

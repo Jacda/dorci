@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dorci/boss_icon.dart';
 import 'package:dorci/dorcet/dorcet.dart';
 import 'package:dorci/hub.dart';
 import 'package:dorci/terrain.dart';
@@ -33,6 +34,7 @@ class Dorci extends FlameGame with HasTappables {
     add(Terrain());
     add(hub);
     add(creditText);
+    add(BossIcon(size: Vector2.all(60), position: Vector2(width - 40, 80)));
     credit = 0;
   }
 

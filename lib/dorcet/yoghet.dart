@@ -8,10 +8,10 @@ class Yoghet extends Dorcet {
   Yoghet({required super.position})
       : super(
           baseDamage: 1,
-          dps: 0.5,
+          baseAttackSpeed: 0.5,
           speed: 200,
           accuracy: 100,
-          baseCost: 10,
+          unlockCost: 10,
           name: "YOGHURT DORCET",
         );
 

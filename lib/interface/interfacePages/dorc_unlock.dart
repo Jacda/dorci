@@ -48,7 +48,6 @@ class BuyButton extends StatefulWidget {
 
 class _BuyButtonState extends State<BuyButton> {
   bool isPressed = false;
-
   Timer? timer;
 
   void onTapDown(TapDownDetails details) {
@@ -74,10 +73,10 @@ class _BuyButtonState extends State<BuyButton> {
 
   void buyDorcet() {
     if (widget.dorcet.active ||
-        !widget.game.enoughCredit(widget.dorcet.cost.toInt())) {
+        !widget.game.enoughCredit(widget.dorcet.unlockCost.toInt())) {
       return;
     }
-    widget.dorcet.level += 1;
+    widget.dorcet.active = true;
   }
 
   @override
@@ -99,7 +98,7 @@ class _BuyButtonState extends State<BuyButton> {
   Color getColor() {
     if (widget.dorcet.active) {
       return const Color.fromARGB(255, 102, 102, 102);
-    } else if (!widget.game.enoughCredit(widget.dorcet.cost.toInt())) {
+    } else if (!widget.game.enoughCredit(widget.dorcet.unlockCost.toInt())) {
       return Colors.grey;
     } else if (isPressed) {
       return const Color.fromARGB(255, 96, 30, 30);

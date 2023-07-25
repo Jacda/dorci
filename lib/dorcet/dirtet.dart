@@ -9,10 +9,10 @@ class Dirtet extends Dorcet {
   Dirtet({required super.position})
       : super(
           baseDamage: 7.5,
-          dps: 2.5,
+          baseAttackSpeed: 1/3,
           speed: 150,
           accuracy: 120,
-          baseCost: 100,
+          unlockCost: 100,
           name: "DIRT DORCET",
         );
 
