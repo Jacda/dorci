@@ -46,15 +46,15 @@ abstract class Dorcet extends PositionComponent with HasGameRef<Dorci> {
     timer = -cooldown / 2;
   }
 
-  double get damage => (damageLevel * (baseDamage / 3) + baseDamage);
+  double get damage => (damageLevel * (baseDamage / 2.3) + baseDamage);
   double get attackSpeed =>
-      (attackSpeedLevel * (baseAttackSpeed / 9) + baseAttackSpeed);
+      (attackSpeedLevel * (baseAttackSpeed / 4.5) + baseAttackSpeed);
   double get levelUpDamageCost =>
       unlockCost *
-      pow(1.2 - 0.02 * log(e + damageLevel), damageLevel).toDouble();
+      pow(1.23 - 0.02 * log(e + damageLevel), damageLevel).toDouble();
   double get levelUpAttackSpeedCost =>
       unlockCost *
-      pow(1.18 - 0.02 * log(e + attackSpeedLevel), attackSpeedLevel).toDouble();
+      pow(1.25 - 0.02 * log(e + attackSpeedLevel), attackSpeedLevel).toDouble();
 
   late double timer;
 

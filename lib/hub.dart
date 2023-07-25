@@ -66,7 +66,7 @@ class Hub extends SpriteAnimationComponent
     final pposition = Vector2(x + offset, y - 50);
     game.add(TapProjectile(
       speed: 250,
-      damage: (totalDPS / 4).floor() + 10000000,
+      damage: (totalDPS / 4).floor() + 0.2,
       position: pposition,
     ));
     return false;

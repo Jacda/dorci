@@ -12,13 +12,12 @@ abstract class BaseProjectile extends PositionComponent with HasGameRef<Dorci> {
 
   @override
   void update(double dt) {
-    if (y <= 40) removeFromParent();
+    if (y <= 60) normalRemove();
     y -= speed * dt;
   }
 
-  @override
-  void removeFromParent() {
-    super.removeFromParent();
+  void normalRemove() {
     game.credit += damage;
+    removeFromParent();
   }
 }

@@ -12,12 +12,12 @@ class BossIcon extends PositionComponent with HasGameRef<Dorci> {
     required super.size,
     required super.position,
   }) {
-    anchor = Anchor.topLeft;
+    anchor = Anchor.center;
     rrect = RRect.fromLTRBR(
-      -width / 2,
-      height / 2,
-      width / 2,
-      -height / 2,
+      0,
+      height,
+      width,
+      0,
       const Radius.circular(40),
     );
   }
@@ -32,12 +32,17 @@ class BossIcon extends PositionComponent with HasGameRef<Dorci> {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+    canvas.drawCircle(
+      (size / 2).toOffset(),
+      width / 2 + 2,
+      Paint()..color = Colors.white,
+    );
     canvas.save();
     canvas.clipRRect(rrect);
     sprite.render(
       canvas,
       size: size * 1.21,
-      position: Vector2.zero(),
+      position: size / 2,
       anchor: Anchor.center,
     );
     canvas.restore();
